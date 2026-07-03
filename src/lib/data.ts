@@ -47,7 +47,7 @@ There's something almost violent about it, the way we reduce this whole living, 
       title: "Patreon: TouchDesigner and Cavalry Project Files",
     },
     {
-      href: "https://www.framer.com/@aashayagrawal/?tab=marketplace",
+      href: "https://framer.link/KNrvUWZ",
       title: "Store: Framer Templates and Components",
     },
     {
