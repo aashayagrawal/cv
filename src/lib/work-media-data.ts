@@ -26,6 +26,7 @@ export const cdnWorkMedia: CdnWorkMediaData[] = [
 
   "https://cdn.cosmos.so/9b837dca-c61e-4e24-8cd0-b782cc75e8d4?format=webp&w=2048",
 
+  "https://d2w9rnfcy7mm78.cloudfront.net/47841483/original_4359264c8678a461757799ffd5e39e10.png?1783960148?bc=0",
 
 ];
 
