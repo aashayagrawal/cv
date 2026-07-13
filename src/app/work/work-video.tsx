@@ -69,7 +69,7 @@ export function WorkVideo({
       muted={shouldMute}
       playsInline={playsInline}
       preload="metadata"
-      className="mb-[6px] block h-auto w-full break-inside-avoid rounded-[8px] border border-[#F3F3F3] bg-neutral-100"
+      className="block h-auto w-full rounded-[8px] border border-[#F3F3F3] bg-neutral-100"
     />
   );
 }

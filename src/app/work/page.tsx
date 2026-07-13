@@ -21,7 +21,7 @@ export const metadata = {
 
 function WorkImage({ alt = "", height = 1080, src, width = 1440 }: WorkMediaData) {
   const className =
-    "mb-[6px] block h-auto w-full break-inside-avoid rounded-[8px] border border-[#F3F3F3]";
+    "block h-auto w-full rounded-[8px] border border-[#F3F3F3]";
   const isRemote = src.startsWith("http://") || src.startsWith("https://");
 
   if (isRemote) {
@@ -52,11 +52,31 @@ function WorkImage({ alt = "", height = 1080, src, width = 1440 }: WorkMediaData
 }
 
 function WorkMedia(media: WorkMediaData) {
-  if (media.type === "video") {
-    return <WorkVideo {...media} />;
+  const className = `mb-[6px] block break-inside-avoid ${
+    media.href ? "cursor-pointer" : "cursor-default"
+  }`;
+  const content =
+    media.type === "video" ? (
+      <WorkVideo {...media} />
+    ) : (
+      <WorkImage {...media} />
+    );
+
+  if (!media.href) {
+    return <div className={className}>{content}</div>;
   }
 
-  return <WorkImage {...media} />;
+  return (
+    <a
+      href={media.href}
+      aria-label={media.alt || "View original project"}
+      className={className}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {content}
+    </a>
+  );
 }
 
 function WorkBarIcon({

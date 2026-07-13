@@ -20,6 +20,7 @@ export type WorkMediaData = {
   autoPlay?: boolean;
   controls?: boolean;
   height?: number;
+  href?: string;
   loop?: boolean;
   muted?: boolean;
   playsInline?: boolean;
@@ -197,6 +198,7 @@ function getCdnWorkMedia(): WorkMediaData[] {
         alt: typeof media === "string" ? "" : media.alt ?? "",
         autoPlay: typeof media === "string" ? undefined : media.autoPlay,
         controls: typeof media === "string" ? undefined : media.controls,
+        href: typeof media === "string" ? undefined : media.href,
         loop: typeof media === "string" ? undefined : media.loop,
         muted: typeof media === "string" ? undefined : media.muted,
         playsInline: typeof media === "string" ? undefined : media.playsInline,
@@ -210,6 +212,7 @@ function getCdnWorkMedia(): WorkMediaData[] {
       src,
       type,
       alt: typeof media === "string" ? "" : media.alt ?? "",
+      href: typeof media === "string" ? undefined : media.href,
       ...dimensions,
     };
   });
