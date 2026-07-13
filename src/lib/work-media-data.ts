@@ -24,9 +24,9 @@ export const cdnWorkMedia: CdnWorkMediaData[] = [
 
 "https://cdn.cosmos.so/0504161f-654b-4758-aee1-a50c6cb158b9?format=webp&w=2048",
 
-  "https://cdn.cosmos.so/9b837dca-c61e-4e24-8cd0-b782cc75e8d4?format=webp&w=2048",
+"https://cdn.cosmos.so/9b837dca-c61e-4e24-8cd0-b782cc75e8d4?format=webp&w=2048",
 
-  "https://d2w9rnfcy7mm78.cloudfront.net/47842562/original_5b1f46611255f69d4ed3131a452c3c7c.png?1783961590?bc=0",
+"https://cdn.cosmos.so/ee7be4e3-10f9-47fc-86e4-18fa6216c84e?format=webp",
 
 ];
 
