@@ -100,8 +100,8 @@ const ContactSection = memo(
             rel="noopener noreferrer"
           >
             telegram
-          </a>{" "}
-          or{" "}
+          </a>.{" "}
+          {/*or{" "}
           <a
             href={contact.whatsapp}
             className="underline-offset-2 underline hover:text-[#007CFF] transition-all duration-200"
@@ -109,8 +109,8 @@ const ContactSection = memo(
             rel="noopener noreferrer"
           >
             whatsapp
-          </a>
-          . You can also hire for freelance work via{" "}
+          </a>*/}
+           You can also hire for freelance work via{" "}
           <a
             href={contact.freelance}
             className="underline-offset-2 underline hover:text-[#007CFF] transition-all duration-200"
