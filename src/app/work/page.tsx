@@ -1,10 +1,11 @@
 import {
-  ArrowLeft02Icon,
   Calendar03Icon,
+  Home01Icon,
   InstagramIcon,
   NewTwitterIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -14,7 +15,7 @@ import { getWorkMedia } from "@/lib/work-media";
 import type { WorkMediaData } from "@/lib/work-media";
 import { WorkVideo } from "./work-video";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Artifacts",
   description: "Artifacts of my Design Experiments",
 };
@@ -112,7 +113,7 @@ function BarIconLink({
     "group relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#F9F9F9] text-zinc-500 transition-colors duration-200 hover:bg-[#F1F1F1] hover:text-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF]";
   const content = (
     <>
-      <span className="pointer-events-none absolute bottom-[calc(100%+12px)] left-1/2 z-30 max-w-[180px] -translate-x-1/2 translate-y-1 scale-95 whitespace-nowrap rounded-[7px] bg-black px-2.5 py-1.5 text-[10px] font-medium leading-none text-white opacity-0 shadow-[0_8px_20px_#00000024] transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100">
+      <span className="pointer-events-none absolute bottom-[calc(100%+12px)] left-1/2 z-30 max-w-[180px] -translate-x-1/2 whitespace-nowrap rounded-[7px] bg-black px-2.5 py-1.5 text-[10px] font-medium leading-none text-white opacity-0 shadow-[0_8px_20px_#00000024] group-hover:opacity-100 group-focus-visible:opacity-100">
         {label}
       </span>
       {children}
@@ -156,17 +157,17 @@ function FloatingWorkBar({
       aria-label="Work page shortcuts"
       className="fixed bottom-[calc(env(safe-area-inset-bottom)+14px)] left-1/2 z-[999] flex max-w-[calc(100vw-20px)] -translate-x-1/2 items-center gap-1 rounded-full border border-[#F5F5F5] bg-white p-1 font-mono shadow-[0_2px_2px_#00000014,0_12px_20px_#0000001F]"
     >
-      <BarIconLink href="/" label="Back to home">
-        <WorkBarIcon icon={ArrowLeft02Icon} />
+      <BarIconLink href="/" label="Home">
+        <WorkBarIcon icon={Home01Icon} />
       </BarIconLink>
-      <BarIconLink href={twitter} label="X (Twitter)" external>
+      <BarIconLink href={twitter} label="Twitter" external>
         <WorkBarIcon icon={NewTwitterIcon}  className="scale-[0.90]"/>
-      </BarIconLink>
-      <BarIconLink href={calendar} label="Schedule a meeting" external>
-        <WorkBarIcon icon={Calendar03Icon} />
       </BarIconLink>
       <BarIconLink href={instagram} label="Instagram" external>
         <WorkBarIcon icon={InstagramIcon} className="scale-[1.05]" />
+      </BarIconLink>
+      <BarIconLink href={calendar} label="Schedule a meeting" external>
+        <WorkBarIcon icon={Calendar03Icon} />
       </BarIconLink>
       <a
         href={freelance}
