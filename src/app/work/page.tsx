@@ -166,7 +166,7 @@ function FloatingWorkBar({
       <BarIconLink href={instagram} label="Instagram" external>
         <WorkBarIcon icon={InstagramIcon} className="scale-[1.05]" />
       </BarIconLink>
-      <BarIconLink href={calendar} label="Schedule a meeting" external>
+      <BarIconLink href={calendar} label="Schedule a Meet" external>
         <WorkBarIcon icon={Calendar03Icon} />
       </BarIconLink>
       <a
