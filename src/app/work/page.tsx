@@ -52,8 +52,8 @@ function WorkImage({ alt = "", height = 1080, src, width = 1440 }: WorkMediaData
   );
 }
 
-function WorkMedia(media: WorkMediaData) {
-  const className = `mb-[6px] block break-inside-avoid ${
+function WorkMedia({ order, ...media }: WorkMediaData & { order: number }) {
+  const className = `block ${
     media.href ? "cursor-pointer" : "cursor-default"
   }`;
   const content =
@@ -64,7 +64,11 @@ function WorkMedia(media: WorkMediaData) {
     );
 
   if (!media.href) {
-    return <div className={className}>{content}</div>;
+    return (
+      <div className={className} style={{ order }}>
+        {content}
+      </div>
+    );
   }
 
   return (
@@ -72,6 +76,7 @@ function WorkMedia(media: WorkMediaData) {
       href={media.href}
       aria-label={media.alt || "View original project"}
       className={className}
+      style={{ order }}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -183,6 +188,7 @@ function FloatingWorkBar({
 
 export default async function WorkPage() {
   const media = await getWorkMedia();
+  const indexedMedia = media.map((item, index) => ({ index, item }));
   const { contact, socials } = await getPortfolioData();
   const twitter = socials.find((social) => social.label === "Twitter")?.href ?? "";
   const instagram =
@@ -198,9 +204,18 @@ export default async function WorkPage() {
       />
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
         {media.length > 0 ? (
-          <div className="columns-1 gap-[6px] p-[10px] sm:columns-2">
-            {media.map((item) => (
-              <WorkMedia key={item.src} {...item} />
+          <div className="flex flex-col gap-[6px] p-[10px] sm:grid sm:grid-cols-2 sm:items-start">
+            {[0, 1].map((columnIndex) => (
+              <div
+                key={columnIndex}
+                className="contents sm:flex sm:min-w-0 sm:flex-col sm:gap-[6px]"
+              >
+                {indexedMedia
+                  .filter(({ index }) => index % 2 === columnIndex)
+                  .map(({ index, item }) => (
+                    <WorkMedia key={item.src} order={index} {...item} />
+                  ))}
+              </div>
             ))}
           </div>
         ) : null}
