@@ -16,8 +16,8 @@ import type { WorkMediaData } from "@/lib/work-media";
 import { WorkVideo } from "./work-video";
 
 export const metadata: Metadata = {
-  title: "Artifacts",
-  description: "Artifacts of my Design Experiments",
+  title: "Aashay Agrawal",
+  description: "A collection of my design artifacts across brand and web.",
 };
 
 function WorkImage({ alt = "", height = 1080, src, width = 1440 }: WorkMediaData) {
