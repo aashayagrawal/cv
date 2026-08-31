@@ -1,5 +1,17 @@
 export type WorkMediaType = "image" | "video";
 
+export type CdnImageOptimization =
+  | {
+      widthParam: string;
+      widths?: number[];
+    }
+  | {
+      sources: Array<{
+        src: string;
+        width: number;
+      }>;
+    };
+
 export type CdnWorkMediaData =
   | string
   | {
@@ -8,6 +20,7 @@ export type CdnWorkMediaData =
       controls?: boolean;
       height?: number;
       href?: string;
+      imageOptimization?: CdnImageOptimization;
       loop?: boolean;
       muted?: boolean;
       playsInline?: boolean;
@@ -18,8 +31,16 @@ export type CdnWorkMediaData =
     };
 
 // Add CDN-hosted work media here.
-// Plain links are auto-detected by extension. Use an object when a URL does not
-// end in a normal image/video extension, or when you want a poster/alt label.
+// Paste plain image/video URLs directly into the list below. Common CDN width
+// parameters are detected automatically. Use an object only when you need a
+// poster, alt text, project link, or a custom image transformation.
+//
+// Responsive image options are provider-specific and optional:
+// - Query-based CDN: imageOptimization: { widthParam: "w" }
+// - Custom/path-based CDN: imageOptimization: {
+//     sources: [{ src: "...-640.webp", width: 640 }, ...]
+//   }
+// A plain URL remains safe and simply loads without a generated srcset.
 //
 //
 // // Linked media example — copy, uncomment, and replace these values:

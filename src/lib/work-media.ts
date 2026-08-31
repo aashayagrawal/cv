@@ -1,9 +1,18 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { cdnWorkMedia } from "@/lib/work-media-data";
-import type { CdnWorkMediaData, WorkMediaType } from "@/lib/work-media-data";
+import type {
+  CdnImageOptimization,
+  CdnWorkMediaData,
+  WorkMediaType,
+} from "@/lib/work-media-data";
 
 const WORK_DIR = path.join(process.cwd(), "public", "work");
+export const EAGER_WORK_IMAGE_COUNT = 4;
+const KNOWN_CDN_WIDTH_PARAMS: Record<string, string> = {
+  "cdn.cosmos.so": "w",
+};
+const COMMON_WIDTH_PARAMS = ["w", "width"];
 const IMAGE_EXTENSIONS = new Set([".avif", ".gif", ".jpg", ".jpeg", ".png", ".webp"]);
 const VIDEO_EXTENSIONS = new Set([
   ".m3u8",
@@ -21,6 +30,7 @@ export type WorkMediaData = {
   controls?: boolean;
   height?: number;
   href?: string;
+  imageOptimization?: CdnImageOptimization;
   loop?: boolean;
   muted?: boolean;
   playsInline?: boolean;
@@ -164,6 +174,26 @@ async function getLocalWorkMedia() {
   }
 }
 
+function getCdnImageOptimization(
+  src: string,
+  media: CdnWorkMediaData
+): CdnImageOptimization | undefined {
+  if (typeof media === "object" && media.imageOptimization) {
+    return media.imageOptimization;
+  }
+
+  try {
+    const url = new URL(src);
+    const widthParam =
+      COMMON_WIDTH_PARAMS.find((param) => url.searchParams.has(param)) ??
+      KNOWN_CDN_WIDTH_PARAMS[url.hostname];
+
+    return widthParam ? { widthParam } : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function getCdnImageDimensions(src: string, media: CdnWorkMediaData) {
   if (typeof media === "object" && media.width && media.height) {
     return {
@@ -173,7 +203,16 @@ function getCdnImageDimensions(src: string, media: CdnWorkMediaData) {
   }
 
   const url = new URL(src, "https://local.invalid");
-  const width = Number(url.searchParams.get("width") ?? url.searchParams.get("w"));
+  const imageOptimization = getCdnImageOptimization(src, media);
+  const configuredWidthParam =
+    imageOptimization && "widthParam" in imageOptimization
+      ? imageOptimization.widthParam
+      : undefined;
+  const width = Number(
+    (configuredWidthParam && url.searchParams.get(configuredWidthParam)) ??
+      url.searchParams.get("width") ??
+      url.searchParams.get("w")
+  );
   const height = Number(url.searchParams.get("height") ?? url.searchParams.get("h"));
 
   return {
@@ -207,12 +246,14 @@ function getCdnWorkMedia(): WorkMediaData[] {
     }
 
     const dimensions = getCdnImageDimensions(src, media);
+    const imageOptimization = getCdnImageOptimization(src, media);
 
     return {
       src,
       type,
       alt: typeof media === "string" ? "" : media.alt ?? "",
       href: typeof media === "string" ? undefined : media.href,
+      imageOptimization,
       ...dimensions,
     };
   });
@@ -222,6 +263,38 @@ function getCdnWorkMedia(): WorkMediaData[] {
 
 export async function getWorkMedia() {
   return [...(await getLocalWorkMedia()), ...getCdnWorkMedia()];
+}
+
+export function getPriorityImageOrigins(
+  media: WorkMediaData[],
+  imageCount: number
+) {
+  const origins = new Set<string>();
+  let imagesSeen = 0;
+
+  for (const item of media) {
+    if (item.type !== "image") {
+      continue;
+    }
+
+    if (imagesSeen >= imageCount) {
+      break;
+    }
+
+    imagesSeen += 1;
+
+    try {
+      const url = new URL(item.src);
+
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        origins.add(url.origin);
+      }
+    } catch {
+      // Local paths do not need a separate connection.
+    }
+  }
+
+  return [...origins];
 }
 
 export async function getWorkMediaPreloadItems() {

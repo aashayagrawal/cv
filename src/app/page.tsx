@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { memo } from "react";
 import { getPortfolioData } from "@/lib/data";
-import { WorkPreloader } from "./work-preloader";
+import {
+  EAGER_WORK_IMAGE_COUNT,
+  getPriorityImageOrigins,
+  getWorkMedia,
+} from "@/lib/work-media";
+import { WorkIntentLink } from "./work-intent-link";
 
 // Memoized components for better performance
 const AboutSection = memo(({ name, text }: { name: string; text: string }) => {
@@ -19,7 +24,13 @@ AboutSection.displayName = "AboutSection";
 
 // Optimized Projects Section
 const ProjectsSection = memo(
-  ({ projects }: { projects: Array<{ href: string; title: string }> }) => {
+  ({
+    projects,
+    workMediaOrigins,
+  }: {
+    projects: Array<{ href: string; title: string }>;
+    workMediaOrigins: string[];
+  }) => {
     return (
       <section className="flex flex-col gap-1">
         <h2 className="text-[17px] font-bold sm:text-lg">Projects</h2>
@@ -32,7 +43,14 @@ const ProjectsSection = memo(
             return (
               <li key={index} className="flex items-start">
                 <span className="mr-3">•</span>
-                {isInternalLink ? (
+                {project.href === "/work" ? (
+                  <WorkIntentLink
+                    className={className}
+                    mediaOrigins={workMediaOrigins}
+                  >
+                    {project.title}
+                  </WorkIntentLink>
+                ) : isInternalLink ? (
                   <Link href={project.href} className={className}>
                     {project.title}
                   </Link>
@@ -156,8 +174,14 @@ SocialsSection.displayName = "SocialsSection";
 
 // Server-side rendered page component
 export default async function Portfolio() {
-  // Fetch data on each request (Server-side rendering)
-  const data = await getPortfolioData();
+  const [data, workMedia] = await Promise.all([
+    getPortfolioData(),
+    getWorkMedia(),
+  ]);
+  const workMediaOrigins = getPriorityImageOrigins(
+    workMedia,
+    EAGER_WORK_IMAGE_COUNT
+  );
   return (
     <div className="font-mono min-h-screen flex flex-col overflow-visible bg-white text-neutral-900">
       <div className="flex-1 flex flex-col justify-center px-4 py-12">
@@ -166,7 +190,10 @@ export default async function Portfolio() {
           <AboutSection name={data.about.name} text={data.about.text} />
 
           {/* Side Projects Section */}
-          <ProjectsSection projects={data.projects} />
+          <ProjectsSection
+            projects={data.projects}
+            workMediaOrigins={workMediaOrigins}
+          />
 
           {/* Contact Section */}
           <ContactSection contact={data.contact} />
@@ -175,7 +202,6 @@ export default async function Portfolio() {
           <SocialsSection socials={data.socials} />
         </div>
       </div>
-      <WorkPreloader />
     </div>
   );
 }
