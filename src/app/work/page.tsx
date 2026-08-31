@@ -23,7 +23,7 @@ import { WorkVideo } from "./work-video";
 
 export const metadata: Metadata = {
   title: "Aashay Agrawal",
-  description: "A collection of my design artifacts across brand and web.",
+  description: "Hey, I’m Aashay. I’m an independent designer working across brand and web, creating thoughtful digital experiences.",
 };
 
 const DEFAULT_RESPONSIVE_IMAGE_WIDTHS = [640, 1024, 1600, 2048];
