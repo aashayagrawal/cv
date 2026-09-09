@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 function BookCard({ book }: { book: (typeof books)[number] }) {
   return (
-    <article className="relative flex aspect-square min-w-0 flex-col rounded-[8px] border border-[#E4E4E7] bg-[#F7F7F7] p-4">
+    <article className="relative flex aspect-square min-w-0 flex-col rounded-[8px] border border-[#F3F3F3] bg-[#F7F7F7] p-4">
       <div className="absolute inset-x-4 top-[20%] flex h-[60%] items-center justify-center">
         <Image
           src={book.image}
