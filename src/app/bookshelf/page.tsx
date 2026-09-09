@@ -34,7 +34,7 @@ export default function BookshelfPage() {
   return (
     <main className="min-h-screen bg-white px-4 pt-4 pb-4 font-mono text-neutral-900">
       <div className="w-full">
-        <header className="mb-8">
+        <header className="mb-4">
           <h1 className="text-xl font-bold">Bookshelf</h1>
           <p className="mt-1 text-sm text-neutral-500">A collection of books I have read.</p>
         </header>
