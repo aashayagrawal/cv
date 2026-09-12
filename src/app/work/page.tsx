@@ -1,7 +1,7 @@
 import {
   Calendar03Icon,
   Home01Icon,
-  InstagramIcon,
+  Mail01Icon,
   NewTwitterIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -20,6 +20,7 @@ import {
 import type { WorkMediaData } from "@/lib/work-media";
 import type { CdnImageOptimization } from "@/lib/work-media-data";
 import { WorkVideo } from "./work-video";
+import { CopyEmailButton } from "./copy-email-button";
 
 export const metadata: Metadata = {
   title: "Aashay Agrawal",
@@ -244,12 +245,12 @@ function BarIconLink({
 function FloatingWorkBar({
   calendar,
   freelance,
-  instagram,
+  email,
   twitter,
 }: {
   calendar: string;
   freelance: string;
-  instagram: string;
+  email: string;
   twitter: string;
 }) {
   return (
@@ -263,9 +264,9 @@ function FloatingWorkBar({
       <BarIconLink href={twitter} label="Twitter" external>
         <WorkBarIcon icon={NewTwitterIcon}  className="scale-[0.90]"/>
       </BarIconLink>
-      <BarIconLink href={instagram} label="Instagram" external>
-        <WorkBarIcon icon={InstagramIcon} className="scale-[1.05]" />
-      </BarIconLink>
+      <CopyEmailButton email={email}>
+        <WorkBarIcon icon={Mail01Icon} className="scale-[1.05]" />
+      </CopyEmailButton>
       <BarIconLink href={calendar} label="Schedule a Meet" external>
         <WorkBarIcon icon={Calendar03Icon} />
       </BarIconLink>
@@ -305,15 +306,13 @@ export default async function WorkPage() {
   });
   const { contact, socials } = await getPortfolioData();
   const twitter = socials.find((social) => social.label === "Twitter")?.href ?? "";
-  const instagram =
-    socials.find((social) => social.label === "Instagram")?.href ?? "";
 
   return (
     <>
       <FloatingWorkBar
         calendar={contact.calendar}
         freelance={contact.freelance}
-        instagram={instagram}
+        email={contact.email}
         twitter={twitter}
       />
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
