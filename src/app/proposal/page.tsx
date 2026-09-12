@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getPortfolioData } from "@/lib/data";
 import { CurrentDate } from "./current-date";
@@ -5,7 +6,7 @@ import { PrintButton } from "./print-button";
 import { ProposalSmoothScroll } from "./smooth-scroll";
 import { ContentsRail } from "./contents-rail";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Proposal",
   description: "A freelance design and interactive build proposal outline.",
 };
