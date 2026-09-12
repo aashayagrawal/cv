@@ -7,6 +7,7 @@ import {
   getWorkMedia,
 } from "@/lib/work-media";
 import { WorkIntentLink } from "./work-intent-link";
+import { CopyEmailButton } from "./copy-email-button";
 
 // Memoized components for better performance
 const AboutSection = memo(({ name, text }: { name: string; text: string }) => {
@@ -93,14 +94,7 @@ const ContactSection = memo(
       <div className="text-[15px] text-neutral-600 sm:text-base">
         <p>
           For full-time opportunities or contract work, feel free to reach out via{" "}
-          <a
-            href={`https://mail.google.com/mail/?view=cm&to=${contact.email}`}
-            className="underline-offset-2 underline hover:text-[#007CFF] transition-all duration-200"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            email
-          </a>{" "}
+          <CopyEmailButton email={contact.email} />{" "}
           or schedule a{" "}
           <a
             href={contact.calendar}

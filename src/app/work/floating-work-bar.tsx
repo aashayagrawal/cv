@@ -166,7 +166,7 @@ export function FloatingWorkBar({
           <HugeiconsIcon
             icon={icon}
             size={16}
-            strokeWidth={1.8}
+            strokeWidth={2}
             aria-hidden="true"
             className={`h-4 w-4 flex-shrink-0 ${key === "twitter" ? "scale-[0.90]" : key === "email" ? "scale-[1.05]" : ""}`}
           />
