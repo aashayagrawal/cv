@@ -112,7 +112,7 @@ export function FloatingWorkBar({
       if (!hovered.current && !focused.current) {
         setTooltip((previous) => ({ ...previous, visible: false }));
       }
-    }, 2000);
+    }, 600);
   }
 
   function triggerProps(key: Shortcut) {
