@@ -1,16 +1,6 @@
-import {
-  Calendar03Icon,
-  Home01Icon,
-  Mail01Icon,
-  NewTwitterIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import type { ReactNode } from "react";
 import { preconnect } from "react-dom";
-import type { IconSvgElement } from "@hugeicons/react";
 import { getPortfolioData } from "@/lib/data";
 import {
   EAGER_WORK_IMAGE_COUNT,
@@ -20,7 +10,7 @@ import {
 import type { WorkMediaData } from "@/lib/work-media";
 import type { CdnImageOptimization } from "@/lib/work-media-data";
 import { WorkVideo } from "./work-video";
-import { CopyEmailButton } from "./copy-email-button";
+import { FloatingWorkBar } from "./floating-work-bar";
 
 export const metadata: Metadata = {
   title: "Aashay Agrawal",
@@ -181,107 +171,6 @@ function WorkMedia({
   );
 }
 
-function WorkBarIcon({
-  className = "",
-  icon,
-}: {
-  className?: string;
-  icon: IconSvgElement;
-}) {
-  return (
-    <HugeiconsIcon
-      icon={icon}
-      size={16}
-      strokeWidth={1.8}
-      aria-hidden="true"
-      className={`h-4 w-4 flex-shrink-0 ${className}`}
-    />
-  );
-}
-
-function BarIconLink({
-  href,
-  label,
-  children,
-  external = false,
-}: {
-  href: string;
-  label: string;
-  children: ReactNode;
-  external?: boolean;
-}) {
-  const className =
-    "group relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#F9F9F9] text-zinc-500 transition-colors duration-200 hover:bg-[#F1F1F1] hover:text-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF]";
-  const content = (
-    <>
-      <span className="pointer-events-none absolute bottom-[calc(100%+12px)] left-1/2 z-30 max-w-[180px] -translate-x-1/2 whitespace-nowrap rounded-[7px] bg-black px-2.5 py-1.5 text-[10px] font-medium leading-none text-white opacity-0 shadow-[0_8px_20px_#00000024] group-hover:opacity-100 group-focus-visible:opacity-100">
-        {label}
-      </span>
-      {children}
-    </>
-  );
-
-  if (external) {
-    return (
-      <a
-        href={href}
-        aria-label={label}
-        className={className}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {content}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={href} aria-label={label} className={className}>
-      {content}
-    </Link>
-  );
-}
-
-function FloatingWorkBar({
-  calendar,
-  freelance,
-  email,
-  twitter,
-}: {
-  calendar: string;
-  freelance: string;
-  email: string;
-  twitter: string;
-}) {
-  return (
-    <nav
-      aria-label="Work page shortcuts"
-      className="fixed bottom-[calc(env(safe-area-inset-bottom)+14px)] left-1/2 z-[999] flex max-w-[calc(100vw-20px)] -translate-x-1/2 items-center gap-1 rounded-full border border-[#F5F5F5] bg-white p-1 font-mono shadow-[0_2px_2px_#00000014,0_12px_20px_#0000001F]"
-    >
-      <BarIconLink href="/" label="Home">
-        <WorkBarIcon icon={Home01Icon} />
-      </BarIconLink>
-      <BarIconLink href={twitter} label="Twitter" external>
-        <WorkBarIcon icon={NewTwitterIcon}  className="scale-[0.90]"/>
-      </BarIconLink>
-      <CopyEmailButton email={email}>
-        <WorkBarIcon icon={Mail01Icon} className="scale-[1.05]" />
-      </CopyEmailButton>
-      <BarIconLink href={calendar} label="Schedule a Meet" external>
-        <WorkBarIcon icon={Calendar03Icon} />
-      </BarIconLink>
-      <a
-        href={"https://t.me/aashayagrawal"}
-        className="flex h-9 flex-shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-neutral-950 px-3.5 text-sm font-medium leading-5 text-neutral-50 transition-colors duration-200 hover:bg-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF]"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Work with me
-      </a>
-    </nav>
-  );
-}
-
 export default async function WorkPage() {
   const media = await getWorkMedia();
   const priorityImageOrigins = getPriorityImageOrigins(
@@ -311,7 +200,6 @@ export default async function WorkPage() {
     <>
       <FloatingWorkBar
         calendar={contact.calendar}
-        freelance={contact.freelance}
         email={contact.email}
         twitter={twitter}
       />
