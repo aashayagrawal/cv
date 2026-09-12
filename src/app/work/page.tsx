@@ -10,6 +10,7 @@ import {
 import type { WorkMediaData } from "@/lib/work-media";
 import type { CdnImageOptimization } from "@/lib/work-media-data";
 import { WorkVideo } from "./work-video";
+import { WorkMediaLoader } from "./work-media-loader";
 import { FloatingWorkBar } from "./floating-work-bar";
 
 export const metadata: Metadata = {
@@ -151,7 +152,7 @@ function WorkMedia({
 
   if (!media.href) {
     return (
-      <div className={className} style={{ order }}>
+      <div className={className} style={{ order }} data-work-order={order}>
         {content}
       </div>
     );
@@ -163,6 +164,7 @@ function WorkMedia({
       aria-label={media.alt || "View original project"}
       className={className}
       style={{ order }}
+      data-work-order={order}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -205,7 +207,7 @@ export default async function WorkPage() {
       />
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
         {media.length > 0 ? (
-          <div className="flex flex-col gap-[6px] p-[10px] sm:grid sm:grid-cols-2 sm:items-start">
+          <WorkMediaLoader>
             {[0, 1].map((columnIndex) => (
               <div
                 key={columnIndex}
@@ -223,7 +225,7 @@ export default async function WorkPage() {
                   ))}
               </div>
             ))}
-          </div>
+          </WorkMediaLoader>
         ) : null}
       </main>
     </>
