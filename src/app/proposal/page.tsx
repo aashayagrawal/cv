@@ -3,21 +3,12 @@ import { getPortfolioData } from "@/lib/data";
 import { CurrentDate } from "./current-date";
 import { PrintButton } from "./print-button";
 import { ProposalSmoothScroll } from "./smooth-scroll";
+import { ContentsRail } from "./contents-rail";
 
 export const metadata = {
   title: "Proposal",
   description: "A freelance design and interactive build proposal outline.",
 };
-
-const contents = [
-  { id: "scope", label: "Scope of work" },
-  { id: "timeline", label: "Timeline" },
-  { id: "investment", label: "Investment" },
-  { id: "payment-terms", label: "Payment terms" },
-  { id: "payment-methods", label: "Payment methods" },
-  { id: "rights-usage", label: "Rights & usage" },
-  { id: "next-steps", label: "Next steps" },
-];
 
 const proposalSections = [
   {
@@ -203,35 +194,6 @@ function Header() {
         <CurrentDate />
       </div>
     </header>
-  );
-}
-
-function ContentsRail() {
-  return (
-    <aside className="proposal-print-hidden lg:sticky lg:top-1/2 lg:-translate-y-1/2 lg:self-start">
-      <nav
-        aria-label="Proposal contents"
-        className="max-w-[320px]"
-        data-proposal-contents
-      >
-        <p className="mb-8 text-[12px] font-bold tracking-[0.32em] text-neutral-500 uppercase">
-          Contents
-        </p>
-        <ol className="flex gap-3 overflow-x-auto pb-3 text-[14px] text-neutral-500 lg:block lg:space-y-3 lg:overflow-visible lg:pb-0 lg:text-[15px]">
-          {contents.map((item) => (
-            <li key={item.id} className="flex-shrink-0 lg:flex-shrink">
-              <a
-                href={`#${item.id}`}
-                className="group flex items-center gap-3 whitespace-nowrap rounded-full border border-[#F1F1F1] px-3 py-2 transition-colors duration-200 hover:border-[#CFE7FF] hover:text-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] lg:rounded-none lg:border-0 lg:px-0 lg:py-0"
-              >
-                <span className="hidden h-1.5 w-1.5 rounded-full bg-neutral-950 opacity-0 transition-opacity duration-200 group-hover:opacity-100 lg:block" />
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-    </aside>
   );
 }
 
