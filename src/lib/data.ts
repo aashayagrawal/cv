@@ -29,7 +29,7 @@ export interface PortfolioData {
 const defaultData: PortfolioData = {
   about: {
     name: "Aashay Agrawal",
-    text: `Hey, I'm Aashay. I'm a Multidisciplinary Designer. But I try not to let that title define me. I feel like the self is ever-evolving, constantly shifting, a thing which is being shaped by new experiences, new ideas, new obsessions. Pinning it down to a single word feels like such a disservice to that process and existence.
+    text: `Hey, I'm Aashay. I'm a Web & Brand Designer. But I try not to let that title define me. I feel like the self is ever-evolving, constantly shifting, a thing which is being shaped by new experiences, new ideas, new obsessions. Pinning it down to a single word feels like such a disservice to that process and existence.
 
 There's something almost violent about it, the way we reduce this whole living, breathing, changing thing into a neat little box for others to categorize it. Most of what I do in life is simply follow my desires sincerely. I don't have a grand plan for life; all I have is genuine curiosity leading the way, wherever it takes me.`,
   },
