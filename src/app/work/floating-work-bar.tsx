@@ -1,22 +1,15 @@
 "use client";
 
-import {
-  Calendar03Icon,
-  Home01Icon,
-  Mail01Icon,
-  NewTwitterIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import type { FocusEvent, PointerEvent } from "react";
 import { TextMorph } from "torph/react";
 
 const shortcuts = [
-  { key: "home", label: "Home", icon: Home01Icon },
-  { key: "twitter", label: "Twitter", icon: NewTwitterIcon },
-  { key: "email", label: "Email", icon: Mail01Icon },
-  { key: "calendar", label: "Schedule a Meet", icon: Calendar03Icon },
+  { key: "home", label: "Home", icon: "/icons/IconHomeRoofDoor.svg" },
+  { key: "twitter", label: "Twitter", icon: "/icons/IconX.svg" },
+  { key: "email", label: "Email", icon: "/icons/IconEmail2.svg" },
+  { key: "calendar", label: "Schedule a Meet", icon: "/icons/IconCalendar1.svg" },
 ] as const;
 
 type Shortcut = (typeof shortcuts)[number]["key"];
@@ -163,12 +156,13 @@ export function FloatingWorkBar({
     >
       {shortcuts.map(({ key, label: shortcutLabel, icon }) => {
         const content = (
-          <HugeiconsIcon
-            icon={icon}
-            size={16}
-            strokeWidth={2}
+          <span
             aria-hidden="true"
-            className={`h-4 w-4 flex-shrink-0 ${key === "twitter" ? "scale-[0.90]" : key === "email" ? "scale-[1.05]" : ""}`}
+            className={`h-4 w-4 flex-shrink-0 bg-current ${key === "twitter" ? "scale-[0.90]" : key === "email" ? "scale-[1.05]" : ""}`}
+            style={{
+              mask: `url("${icon}") center / contain no-repeat`,
+              WebkitMask: `url("${icon}") center / contain no-repeat`,
+            }}
           />
         );
 
