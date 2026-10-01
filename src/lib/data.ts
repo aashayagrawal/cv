@@ -42,10 +42,10 @@ There's something almost violent about it, the way we reduce this whole living, 
       href: "https://artifacts.aashayagrawal.com/",
       title: "Interface Experiments: Built with Claude",
     },
-    {
-      href: "https://rive.app/@aashayagrawal/",
-      title: "Rive: Interactive Animations",
-    },
+    // {
+    //   href: "https://rive.app/@aashayagrawal/",
+    //   title: "Rive: Interactive Animations",
+    // },
     {
       href: "https://www.patreon.com/cw/aashayagrawal",
       title: "Patreon: TouchDesigner and Cavalry Project Files",
