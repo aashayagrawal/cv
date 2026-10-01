@@ -36,19 +36,19 @@ There's something almost violent about it, the way we reduce this whole living, 
   projects: [
     {
       href: "/work",
-      title: "Artifacts: Collection of all my Design Experiments",
+      title: "Artifacts: Selected Design Projects",
+    },
+    {
+      href: "https://artifacts.aashayagrawal.com/",
+      title: "Interface Experiments: Built with Claude",
     },
     {
       href: "https://rive.app/@aashayagrawal/",
-      title: "Rive Interactions: Collection of my Rive Creations",
+      title: "Rive: Interactive Animations",
     },
     {
       href: "https://www.patreon.com/cw/aashayagrawal",
       title: "Patreon: TouchDesigner and Cavalry Project Files",
-    },
-    {
-      href: "https://framer.link/KNrvUWZ",
-      title: "Store: Framer Templates and Components",
     },
     {
       href: "/bookshelf",
@@ -61,7 +61,7 @@ There's something almost violent about it, the way we reduce this whole living, 
   ],
   contact: {
     email: "aashayagrawal.work@gmail.com",
-    calendar: "https://cal.com/aashayagrawal/general",
+    calendar: "https://cal.com/aashayagrawal/chat",
     freelance: "https://contra.com/aashayagrawal/work",
     telegram: "https://t.me/aashayagrawal",
     whatsapp: "https://wa.me/message/FKS3GDOQWFROE1",
