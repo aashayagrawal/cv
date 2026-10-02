@@ -36,11 +36,11 @@ There's something almost violent about it, the way we reduce this whole living, 
   projects: [
     {
       href: "/work",
-      title: "Artifacts: Selected Design Projects",
+      title: "Work: Brand and Web Design Projects",
     },
     {
       href: "https://artifacts.aashayagrawal.com/",
-      title: "Interface Experiments: Built with Claude",
+      title: "Artifacts: Interface Experiments Built with Claude",
     },
     // {
     //   href: "https://rive.app/@aashayagrawal/",
