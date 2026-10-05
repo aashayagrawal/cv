@@ -50,6 +50,8 @@ export type CdnWorkMediaData =
 //   alt: "Original project name",
 // },
 export const cdnWorkMedia: CdnWorkMediaData[] = [
+"https://attachments.are.na/51080604/a5ecd082d7ff053eac9e80c17036b82c.mp4?1791217804",
+  
   "https://cdn.cosmos.so/ee7be4e3-10f9-47fc-86e4-18fa6216c84e?format=webp",
 
   "https://cdn.cosmos.so/3972a5b1-4669-4350-b7a2-443c5a2d1de2?format=webp&w=2048",
