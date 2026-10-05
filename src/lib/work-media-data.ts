@@ -56,7 +56,7 @@ export const cdnWorkMedia: CdnWorkMediaData[] = [
 
   "https://cdn.cosmos.so/0504161f-654b-4758-aee1-a50c6cb158b9?format=webp&w=2048",
 
-  "https://cdn.cosmos.so/9b837dca-c61e-4e24-8cd0-b782cc75e8d4?format=webp&w=2048",
+  // "https://cdn.cosmos.so/9b837dca-c61e-4e24-8cd0-b782cc75e8d4?format=webp&w=2048",
   
   "https://attachments.are.na/51080604/a5ecd082d7ff053eac9e80c17036b82c.mp4?1791217804",
     
