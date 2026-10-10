@@ -35,12 +35,12 @@ There's something almost violent about it, the way we reduce this whole living, 
   },
   projects: [
     {
-      href: "https://artifacts.aashayagrawal.com/",
-      title: "Artifacts: Interface Experiments Built with Claude",
-    },
-    {
       href: "/work",
       title: "Work: Brand and Web Design Projects",
+    },
+    {
+      href: "https://artifacts.aashayagrawal.com/",
+      title: "Artifacts: Interface Experiments",
     },
     // {
     //   href: "https://rive.app/@aashayagrawal/",
