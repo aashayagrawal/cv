@@ -12,7 +12,7 @@ import type { CdnImageOptimization } from "@/lib/work-media-data";
 import { WorkVideo } from "./work-video";
 import { WorkMediaLoader } from "./work-media-loader";
 import { FloatingWorkBar } from "./floating-work-bar";
-import { WorkLightboxItem } from "./work-lightbox";
+import { WorkLightbox, WorkLightboxItem } from "./work-lightbox";
 
 export const metadata: Metadata = {
   title: "Aashay Agrawal",
@@ -200,25 +200,27 @@ export default async function WorkPage() {
       />
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
         {media.length > 0 ? (
-          <WorkMediaLoader>
-            {Array.from({ length: WORK_COLUMN_COUNT }, (_, columnIndex) => (
-              <div
-                key={columnIndex}
-                className="contents md:flex md:min-w-0 md:flex-col md:gap-[6px]"
-              >
-                {indexedMedia
-                  .filter(({ index }) => index % WORK_COLUMN_COUNT === columnIndex)
-                  .map(({ index, item, priority }) => (
-                    <WorkMedia
-                      key={item.src}
-                      order={index}
-                      priority={priority}
-                      {...item}
-                    />
-                  ))}
-              </div>
-            ))}
-          </WorkMediaLoader>
+          <WorkLightbox>
+            <WorkMediaLoader>
+              {Array.from({ length: WORK_COLUMN_COUNT }, (_, columnIndex) => (
+                <div
+                  key={columnIndex}
+                  className="contents md:flex md:min-w-0 md:flex-col md:gap-[6px]"
+                >
+                  {indexedMedia
+                    .filter(({ index }) => index % WORK_COLUMN_COUNT === columnIndex)
+                    .map(({ index, item, priority }) => (
+                      <WorkMedia
+                        key={item.src}
+                        order={index}
+                        priority={priority}
+                        {...item}
+                      />
+                    ))}
+                </div>
+              ))}
+            </WorkMediaLoader>
+          </WorkLightbox>
         ) : null}
       </main>
     </>
