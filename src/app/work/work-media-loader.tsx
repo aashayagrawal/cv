@@ -1,8 +1,24 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 
 export const LOAD_WORK_VIDEO_EVENT = "load-work-video";
+export const DESKTOP_QUERY = "(min-width: 1024px)";
+const TABLET_QUERY = "(min-width: 768px)";
+
+function subscribeToColumnCount(onChange: () => void) {
+  const queries = [DESKTOP_QUERY, TABLET_QUERY].map((query) => window.matchMedia(query));
+  for (const query of queries) query.addEventListener("change", onChange);
+  return () => {
+    for (const query of queries) query.removeEventListener("change", onChange);
+  };
+}
+
+function getColumnCount() {
+  if (window.matchMedia(DESKTOP_QUERY).matches) return 3;
+  if (window.matchMedia(TABLET_QUERY).matches) return 2;
+  return 1;
+}
 
 function waitForMedia(
   media: HTMLImageElement | HTMLVideoElement,
@@ -29,8 +45,10 @@ function waitForMedia(
   });
 }
 
-export function WorkMediaLoader({ children }: { children: ReactNode }) {
+export function WorkMediaLoader({ items }: { items: ReactNode[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  // The server renders desktop columns; mobile collapses them with CSS order.
+  const columnCount = useSyncExternalStore(subscribeToColumnCount, getColumnCount, () => 3);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -67,11 +85,18 @@ export function WorkMediaLoader({ children }: { children: ReactNode }) {
 
     void loadRemainingMedia();
     return () => controller.abort();
-  }, []);
+  }, [columnCount]);
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] md:grid md:grid-cols-3 md:items-start">
-      {children}
+    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] md:grid md:grid-cols-2 md:items-start lg:grid-cols-3">
+      {Array.from({ length: columnCount }, (_, columnIndex) => (
+        <div
+          key={columnIndex}
+          className="contents md:flex md:min-w-0 md:flex-col md:gap-[6px]"
+        >
+          {items.filter((_, index) => index % columnCount === columnIndex)}
+        </div>
+      ))}
     </div>
   );
 }

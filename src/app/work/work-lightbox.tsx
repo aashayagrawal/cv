@@ -12,6 +12,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
+import { DESKTOP_QUERY } from "./work-media-loader";
 
 type Rect = { height: number; left: number; top: number; width: number };
 type Origin = { scale: number; x: number; y: number };
@@ -138,6 +139,11 @@ export function WorkLightbox({ children }: { children: ReactNode }) {
       if (event.key === "ArrowLeft") step(-1);
     };
     const onResize = () => {
+      // The lightbox is desktop-only.
+      if (!window.matchMedia(DESKTOP_QUERY).matches) {
+        close();
+        return;
+      }
       const order = activeRef.current;
       const nextLayout = order === null ? null : measure(order);
       if (nextLayout) setLayout(nextLayout);
@@ -325,10 +331,17 @@ export function WorkLightboxItem({
       ref={thumbRef}
       type="button"
       aria-label={alt ? `Expand ${alt}` : "Expand work"}
-      className="block w-full cursor-pointer rounded-[8px] text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF]"
+      className={`block w-full rounded-[8px] ${href ? "cursor-pointer" : "cursor-default lg:cursor-pointer"} text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF]`}
       style={{ order, opacity: lightbox?.hiddenOrder === order ? 0 : 1 }}
       data-work-order={order}
-      onClick={() => lightbox?.open(order)}
+      onClick={() => {
+        if (window.matchMedia(DESKTOP_QUERY).matches) {
+          lightbox?.open(order);
+        } else if (href) {
+          // Mobile and tablet skip the lightbox and open the project directly.
+          window.open(href, "_blank", "noopener,noreferrer");
+        }
+      }}
     >
       {children}
     </button>

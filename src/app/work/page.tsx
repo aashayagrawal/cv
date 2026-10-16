@@ -20,8 +20,8 @@ export const metadata: Metadata = {
 };
 
 const DEFAULT_RESPONSIVE_IMAGE_WIDTHS = [640, 1024, 1600, 2048];
-const WORK_COLUMN_COUNT = 3;
-const WORK_IMAGE_SIZES = "(min-width: 768px) calc(33.33vw - 11px), calc(100vw - 20px)";
+const WORK_IMAGE_SIZES =
+  "(min-width: 1024px) calc(33.33vw - 11px), (min-width: 768px) calc(50vw - 13px), calc(100vw - 20px)";
 const EXPANDED_WORK_IMAGE_SIZES = "100vw";
 
 function getImageUrlWithWidth(src: string, widthParam: string, width: number) {
@@ -201,25 +201,16 @@ export default async function WorkPage() {
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
         {media.length > 0 ? (
           <WorkLightbox>
-            <WorkMediaLoader>
-              {Array.from({ length: WORK_COLUMN_COUNT }, (_, columnIndex) => (
-                <div
-                  key={columnIndex}
-                  className="contents md:flex md:min-w-0 md:flex-col md:gap-[6px]"
-                >
-                  {indexedMedia
-                    .filter(({ index }) => index % WORK_COLUMN_COUNT === columnIndex)
-                    .map(({ index, item, priority }) => (
-                      <WorkMedia
-                        key={item.src}
-                        order={index}
-                        priority={priority}
-                        {...item}
-                      />
-                    ))}
-                </div>
+            <WorkMediaLoader
+              items={indexedMedia.map(({ index, item, priority }) => (
+                <WorkMedia
+                  key={item.src}
+                  order={index}
+                  priority={priority}
+                  {...item}
+                />
               ))}
-            </WorkMediaLoader>
+            />
           </WorkLightbox>
         ) : null}
       </main>
