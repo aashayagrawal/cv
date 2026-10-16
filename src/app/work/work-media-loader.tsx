@@ -70,7 +70,7 @@ export function WorkMediaLoader({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] sm:grid sm:grid-cols-2 sm:items-start">
+    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] md:grid md:grid-cols-3 md:items-start">
       {children}
     </div>
   );

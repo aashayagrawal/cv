@@ -12,6 +12,7 @@ import type { CdnImageOptimization } from "@/lib/work-media-data";
 import { WorkVideo } from "./work-video";
 import { WorkMediaLoader } from "./work-media-loader";
 import { FloatingWorkBar } from "./floating-work-bar";
+import { WorkLightboxItem } from "./work-lightbox";
 
 export const metadata: Metadata = {
   title: "Aashay Agrawal",
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
 };
 
 const DEFAULT_RESPONSIVE_IMAGE_WIDTHS = [640, 1024, 1600, 2048];
-const WORK_IMAGE_SIZES = "(min-width: 640px) calc(50vw - 13px), calc(100vw - 20px)";
+const WORK_COLUMN_COUNT = 3;
+const WORK_IMAGE_SIZES = "(min-width: 768px) calc(33.33vw - 11px), calc(100vw - 20px)";
+const EXPANDED_WORK_IMAGE_SIZES = "100vw";
 
 function getImageUrlWithWidth(src: string, widthParam: string, width: number) {
   try {
@@ -89,11 +92,12 @@ function WorkImage({
   height = 1080,
   imageOptimization,
   priority = false,
+  sizes = WORK_IMAGE_SIZES,
   src,
   width = 1440,
-}: WorkMediaData & { priority?: boolean }) {
+}: WorkMediaData & { priority?: boolean; sizes?: string }) {
   const className =
-    "block h-auto w-full rounded-[8px] border border-[#F3F3F3]";
+    "block h-auto w-full select-none rounded-[8px] border border-[#F3F3F3]";
   const isRemote = src.startsWith("http://") || src.startsWith("https://");
 
   if (isRemote) {
@@ -108,7 +112,7 @@ function WorkImage({
       <img
         src={responsiveImage.src}
         srcSet={responsiveImage.srcSet}
-        sizes={WORK_IMAGE_SIZES}
+        sizes={sizes}
         alt={alt}
         width={width}
         height={height}
@@ -116,6 +120,7 @@ function WorkImage({
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
+        draggable={false}
       />
     );
   }
@@ -127,10 +132,11 @@ function WorkImage({
       alt={alt}
       width={width}
       height={height}
-      sizes={WORK_IMAGE_SIZES}
+      sizes={sizes}
       className={className}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
+      draggable={false}
     />
   );
 }
@@ -140,36 +146,23 @@ function WorkMedia({
   priority = false,
   ...media
 }: WorkMediaData & { order: number; priority?: boolean }) {
-  const className = `block ${
-    media.href ? "cursor-pointer" : "cursor-default"
-  }`;
-  const content =
-    media.type === "video" ? (
-      <WorkVideo {...media} />
-    ) : (
-      <WorkImage {...media} priority={priority} />
-    );
-
-  if (!media.href) {
-    return (
-      <div className={className} style={{ order }} data-work-order={order}>
-        {content}
-      </div>
-    );
-  }
+  const isVideo = media.type === "video";
 
   return (
-    <a
+    <WorkLightboxItem
+      alt={media.alt}
       href={media.href}
-      aria-label={media.alt || "View original project"}
-      className={className}
-      style={{ order }}
-      data-work-order={order}
-      target="_blank"
-      rel="noopener noreferrer"
+      order={order}
+      expanded={
+        isVideo ? (
+          <WorkVideo {...media} />
+        ) : (
+          <WorkImage {...media} priority sizes={EXPANDED_WORK_IMAGE_SIZES} />
+        )
+      }
     >
-      {content}
-    </a>
+      {isVideo ? <WorkVideo {...media} /> : <WorkImage {...media} priority={priority} />}
+    </WorkLightboxItem>
   );
 }
 
@@ -208,13 +201,13 @@ export default async function WorkPage() {
       <main className="relative min-h-screen bg-white font-mono text-neutral-900">
         {media.length > 0 ? (
           <WorkMediaLoader>
-            {[0, 1].map((columnIndex) => (
+            {Array.from({ length: WORK_COLUMN_COUNT }, (_, columnIndex) => (
               <div
                 key={columnIndex}
-                className="contents sm:flex sm:min-w-0 sm:flex-col sm:gap-[6px]"
+                className="contents md:flex md:min-w-0 md:flex-col md:gap-[6px]"
               >
                 {indexedMedia
-                  .filter(({ index }) => index % 2 === columnIndex)
+                  .filter(({ index }) => index % WORK_COLUMN_COUNT === columnIndex)
                   .map(({ index, item, priority }) => (
                     <WorkMedia
                       key={item.src}
