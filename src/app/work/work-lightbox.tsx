@@ -117,7 +117,6 @@ export function WorkLightbox({ children }: { children: ReactNode }) {
     setTransition({ mode: "close", origin: nextLayout?.origin });
     setActive(null);
     setHiddenOrder(order);
-    entries.current.get(order)?.thumbRef.current?.focus({ preventScroll: true });
   }, [measure]);
 
   const step = useCallback((direction: 1 | -1) => {
