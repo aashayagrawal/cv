@@ -40,7 +40,7 @@ There's something almost violent about it, the way we reduce this whole living, 
     },
     {
       href: "https://artifacts.aashayagrawal.com/",
-      title: "Artifacts: Interface Experiments",
+      title: "Artifacts: Components and Experiments",
     },
     // {
     //   href: "https://rive.app/@aashayagrawal/",
