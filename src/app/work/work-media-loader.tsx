@@ -45,8 +45,37 @@ function waitForMedia(
   });
 }
 
+// Work media asks for CORS so the transition wave can draw it. A host that
+// will not allow that would leave it blank, so retry it as a plain request:
+// it shows on the page and the wave leaves it out.
+function retryWithoutCors(media: EventTarget | null) {
+  if (!(media instanceof HTMLImageElement || media instanceof HTMLVideoElement)) return;
+  if (!media.hasAttribute("crossorigin")) return;
+  // Images reload on their own when the attribute changes; videos do not.
+  media.removeAttribute("crossorigin");
+  if (media instanceof HTMLVideoElement) media.load();
+}
+
 export function WorkMediaLoader({ items }: { items: ReactNode[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // Load errors do not bubble; listen in the capture phase. On the document,
+    // so the lightbox's copies, rendered elsewhere, are covered too.
+    const onError = (event: Event) => retryWithoutCors(event.target);
+    document.addEventListener("error", onError, true);
+    // Server-rendered media may have failed before this listener existed.
+    for (const media of document.querySelectorAll<HTMLImageElement | HTMLVideoElement>(
+      "img[crossorigin], video[crossorigin]"
+    )) {
+      const failed =
+        media instanceof HTMLImageElement
+          ? media.complete && media.naturalWidth === 0 && Boolean(media.currentSrc)
+          : media.error !== null;
+      if (failed) retryWithoutCors(media);
+    }
+    return () => document.removeEventListener("error", onError, true);
+  }, []);
+
   // The server renders desktop columns; mobile collapses them with CSS order.
   const columnCount = useSyncExternalStore(subscribeToColumnCount, getColumnCount, () => 3);
 

@@ -81,6 +81,7 @@ export function WorkVideo({
       ref={videoRef}
       src={enabled && !isHlsSource(src) ? src : undefined}
       poster={poster}
+      crossOrigin="anonymous"
       controls={controls}
       autoPlay={autoPlay}
       loop={loop}

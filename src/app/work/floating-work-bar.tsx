@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import type { FocusEvent, PointerEvent } from "react";
+import type { FocusEvent, PointerEvent, ReactNode } from "react";
 import { TextMorph } from "torph/react";
+import { PageWave } from "../page-wave";
+import { DESKTOP_QUERY } from "./work-media-loader";
 
 const shortcuts = [
   { key: "home", label: "Home", icon: "/icons/IconHomeRoofDoor.svg" },
@@ -15,19 +17,32 @@ const shortcuts = [
 type Shortcut = (typeof shortcuts)[number]["key"];
 type CopyStatus = "Copied" | "Couldn't copy" | null;
 const easing = "cubic-bezier(0.22, 1, 0.36, 1)";
+// Set once the home page's transition wave has brought in its hidden copy of
+// the bar, so the real bar, after the route change, is already in place.
+let broughtByWave = false;
 const iconClassName =
   "relative flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#F9F9F9] text-zinc-500 transition-colors duration-200 hover:bg-[#F1F1F1] hover:text-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] motion-reduce:transition-none";
 
 export function FloatingWorkBar({
   calendar,
   email,
+  entrance = "mount",
+  home,
   twitter,
 }: {
   calendar: string;
   email: string;
+  // "mount" rises as the page appears; "wave" is the home page's hidden copy
+  // of this page, which the transition wave brings in with the rest of it.
+  entrance?: "mount" | "wave";
+  // The home page, revealed under the transition wave. Without it, as in the
+  // home page's own preview of this page, Home is a plain link.
+  home?: ReactNode;
   twitter: string;
 }) {
   const tooltipId = useId();
+  const navRef = useRef<HTMLElement>(null);
+  const [rises] = useState(() => entrance === "mount" && !broughtByWave);
   const controls = useRef<Partial<Record<Shortcut, HTMLElement>>>({});
   const hovered = useRef<Shortcut | null>(null);
   const focused = useRef<Shortcut | null>(null);
@@ -35,6 +50,12 @@ export function FloatingWorkBar({
   const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const copyFeedback = useRef<CopyStatus>(null);
   const [copyStatus, setCopyStatus] = useState<CopyStatus>(null);
+  const [homeWave, setHomeWave] = useState<{
+    source: HTMLElement;
+    focus: { x: number; y: number } | null;
+    playing: boolean;
+  } | null>(null);
+  const canWave = () => Boolean(home) && window.matchMedia(DESKTOP_QUERY).matches;
   const [tooltip, setTooltip] = useState({
     key: "home" as Shortcut,
     center: 0,
@@ -43,6 +64,25 @@ export function FloatingWorkBar({
     animate: false,
     keyboard: false,
   });
+
+  useEffect(() => {
+    if (entrance !== "wave") {
+      broughtByWave = false;
+      return;
+    }
+    // The wave reveals its hidden layer by raising the layer's opacity, and
+    // clears it ("") once the layer is fully shown.
+    const layer = navRef.current?.closest<HTMLElement>('[data-dw-layer="revealed"]');
+    if (!layer) return;
+    const observer = new MutationObserver(() => {
+      const { opacity } = layer.style;
+      if (opacity !== "" && parseFloat(opacity) <= 0) return;
+      observer.disconnect();
+      broughtByWave = true;
+    });
+    observer.observe(layer, { attributes: true, attributeFilter: ["style"] });
+    return () => observer.disconnect();
+  }, [entrance]);
 
   useEffect(() => {
     return () => {
@@ -152,6 +192,16 @@ export function FloatingWorkBar({
           setTooltip((previous) => ({ ...previous, visible: false }));
         }
       }}
+      ref={navRef}
+      // A wave leaving mid-entrance takes over: its fade-out must not wait.
+      data-bar-enter={rises && !homeWave?.playing ? "play" : undefined}
+      // Drawn into the picture the home page's transition wave reveals.
+      data-wave-picture=""
+      style={{
+        opacity: homeWave?.playing ? 0 : undefined,
+        pointerEvents: homeWave?.playing ? "none" : undefined,
+        transition: `opacity 360ms ${easing} 120ms`,
+      }}
       className="fixed bottom-[calc(env(safe-area-inset-bottom)+14px)] left-1/2 z-[999] flex max-w-[calc(100vw-20px)] -translate-x-1/2 items-center gap-1 rounded-full border border-[#F5F5F5] bg-white p-1 font-mono shadow-[0_2px_2px_#00000014,0_12px_20px_#0000001F]"
     >
       {shortcuts.map(({ key, label: shortcutLabel, icon }) => {
@@ -181,12 +231,62 @@ export function FloatingWorkBar({
         }
 
         if (key === "home") {
+          const trigger = triggerProps(key);
+          // Mount the wave on intent so the home page is pictured before the
+          // click; let it go if the visitor moves on.
+          const arm = (source: HTMLElement) => {
+            if (!homeWave && canWave()) setHomeWave({ source, focus: null, playing: false });
+          };
+          const release = () => {
+            if (!homeWave?.playing) setHomeWave(null);
+          };
           return (
             <Link
               key={key}
-              {...triggerProps(key)}
+              {...trigger}
               href="/"
               aria-label={shortcutLabel}
+              onPointerEnter={(event) => {
+                trigger.onPointerEnter(event);
+                arm(event.currentTarget);
+              }}
+              onPointerLeave={() => {
+                trigger.onPointerLeave();
+                release();
+              }}
+              onFocus={(event) => {
+                trigger.onFocus(event);
+                arm(event.currentTarget);
+              }}
+              onBlur={() => {
+                trigger.onBlur();
+                release();
+              }}
+              onClick={(event) => {
+                if (
+                  homeWave?.playing ||
+                  event.button !== 0 ||
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey ||
+                  // The wave is desktop only; smaller screens navigate as usual.
+                  !canWave()
+                ) {
+                  if (homeWave?.playing) event.preventDefault();
+                  return;
+                }
+                event.preventDefault();
+                // Keyboard clicks report no pointer; let the wave start from the icon.
+                setHomeWave({
+                  source: event.currentTarget,
+                  focus:
+                    event.detail > 0
+                      ? { x: event.clientX, y: event.clientY }
+                      : null,
+                  playing: true,
+                });
+              }}
             >
               {content}
             </Link>
@@ -247,6 +347,19 @@ export function FloatingWorkBar({
       <span role="status" className="sr-only">
         {copyStatus ?? ""}
       </span>
+      {homeWave ? (
+        <PageWave
+          href="/"
+          type="vertical"
+          source={homeWave.source}
+          focus={homeWave.focus}
+          playing={homeWave.playing}
+          contentSelector="main"
+          contentPicture="media"
+          revealedContent={home}
+          revealedPicture="dom"
+        />
+      ) : null}
     </nav>
   );
 }
