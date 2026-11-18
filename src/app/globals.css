@@ -44,7 +44,9 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* Desktop only, at DESKTOP_QUERY's width: on smaller screens there is no
+   transition wave, so the bar is simply in place. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
   [data-bar-enter="play"] {
     animation: work-bar-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
