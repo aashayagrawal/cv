@@ -16,7 +16,7 @@ import { WorkLightbox, WorkLightboxItem } from "./work-lightbox";
 
 const DEFAULT_RESPONSIVE_IMAGE_WIDTHS = [640, 1024, 1600, 2048];
 const WORK_IMAGE_SIZES =
-  "(min-width: 1024px) calc(33.33vw - 11px), (min-width: 768px) calc(50vw - 13px), calc(100vw - 20px)";
+  "(min-width: 768px) calc(50vw - 13px), calc(100vw - 20px)";
 const EXPANDED_WORK_IMAGE_SIZES = "100vw";
 
 function getImageUrlWithWidth(src: string, widthParam: string, width: number) {

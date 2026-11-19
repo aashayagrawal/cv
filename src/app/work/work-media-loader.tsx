@@ -7,17 +7,13 @@ export const DESKTOP_QUERY = "(min-width: 1024px)";
 const TABLET_QUERY = "(min-width: 768px)";
 
 function subscribeToColumnCount(onChange: () => void) {
-  const queries = [DESKTOP_QUERY, TABLET_QUERY].map((query) => window.matchMedia(query));
-  for (const query of queries) query.addEventListener("change", onChange);
-  return () => {
-    for (const query of queries) query.removeEventListener("change", onChange);
-  };
+  const query = window.matchMedia(TABLET_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
 }
 
 function getColumnCount() {
-  if (window.matchMedia(DESKTOP_QUERY).matches) return 3;
-  if (window.matchMedia(TABLET_QUERY).matches) return 2;
-  return 1;
+  return window.matchMedia(TABLET_QUERY).matches ? 2 : 1;
 }
 
 function waitForMedia(
@@ -77,7 +73,7 @@ export function WorkMediaLoader({ items }: { items: ReactNode[] }) {
   }, []);
 
   // The server renders desktop columns; mobile collapses them with CSS order.
-  const columnCount = useSyncExternalStore(subscribeToColumnCount, getColumnCount, () => 3);
+  const columnCount = useSyncExternalStore(subscribeToColumnCount, getColumnCount, () => 2);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -117,7 +113,7 @@ export function WorkMediaLoader({ items }: { items: ReactNode[] }) {
   }, [columnCount]);
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] md:grid md:grid-cols-2 md:items-start lg:grid-cols-3">
+    <div ref={rootRef} className="flex flex-col gap-[6px] p-[10px] md:grid md:grid-cols-2 md:items-start">
       {Array.from({ length: columnCount }, (_, columnIndex) => (
         <div
           key={columnIndex}
