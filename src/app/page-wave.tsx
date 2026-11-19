@@ -19,20 +19,21 @@ type Media = HTMLImageElement | HTMLVideoElement;
 // "media" copies the images and videos on screen (the work grid).
 export type WavePicture = "dom" | "media";
 
-// About 1.3s end to end, against the library's 3.6s: a short pull toward the
-// source, a quicker climb, and edges that clear soon after the front passes.
+// About 1s end to end, against the library's 3.6s: a short pull toward the
+// source, a quicker climb, and edges and particles that clear with the front
+// rather than trailing on after it, so the page arrives as the wave ends.
 const WAVE_STYLE = {
   anticipation: 0.18,
   travel: 1.35,
-  rimFade: 1.1,
+  rimFade: 1.0,
   hairlineLinger: 0.15,
-  hairlineFade: 0.8,
-  particleLife: 1.1,
+  hairlineFade: 0.7,
+  particleLife: 0.7,
 };
 // The longest a slow picture may hold the wave back; its lens eases in late.
-const PREPARE_TIMEOUT = 180;
+const PREPARE_TIMEOUT = 120;
 // The longest the wave waits for the revealed view's media to load.
-const MEDIA_TIMEOUT = 1500;
+const MEDIA_TIMEOUT = 500;
 // Navigate anyway if the wave never reports its end, such as when the tab
 // is hidden mid-run and animation frames stop.
 const FINISH_TIMEOUT = 4000;
