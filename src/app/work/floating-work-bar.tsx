@@ -21,7 +21,7 @@ const easing = "cubic-bezier(0.22, 1, 0.36, 1)";
 // the bar, so the real bar, after the route change, is already in place.
 let broughtByWave = false;
 const iconClassName =
-  "relative flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#F9F9F9] text-zinc-500 transition-colors duration-200 hover:bg-[#F1F1F1] hover:text-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] motion-reduce:transition-none";
+  "relative flex h-9 w-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#F9F9F9] text-zinc-500 select-none transition-[background-color,color,scale] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#F1F1F1] hover:text-[#007CFF] active:scale-[0.94] active:duration-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] motion-reduce:transition-none motion-reduce:active:scale-100";
 
 export function FloatingWorkBar({
   calendar,
@@ -308,7 +308,9 @@ export function FloatingWorkBar({
       })}
       <a
         href="https://t.me/aashayagrawal"
-        className="flex h-9 flex-shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-neutral-950 px-3.5 text-sm font-medium leading-5 text-neutral-50 transition-colors duration-200 hover:bg-[#007CFF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] motion-reduce:transition-none"
+        // Tactile pill: a top sheen and inner highlight over the fill, a dark
+        // rim, and a soft drop that flattens as the button is pressed in.
+        className="flex h-9 flex-shrink-0 select-none items-center justify-center whitespace-nowrap rounded-full border border-neutral-950 bg-neutral-900 bg-[linear-gradient(to_bottom,rgb(255_255_255/0.06),rgb(255_255_255/0)_60%)] px-3.5 text-sm font-medium leading-5 text-neutral-50 shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_1px_2px_rgb(0_0_0/0.12)] transition-[background-color,border-color,box-shadow,scale] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#0070E6] hover:bg-[#007CFF] active:scale-[0.97] active:shadow-[inset_0_1px_1px_rgb(0_0_0/0.15),0_0_0_rgb(0_0_0/0)] active:duration-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007CFF] motion-reduce:transition-none motion-reduce:active:scale-100"
         target="_blank"
         rel="noopener noreferrer"
       >
